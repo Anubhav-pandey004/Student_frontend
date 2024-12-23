@@ -2,7 +2,7 @@ import AllUsers from "../components/AllUsers"
 
 
 
-const backendDomin = "http://localhost:8080"
+const backendDomin = "https://student-backend-k96t.onrender.com"
 
 const SummaryApi={
     signup:{
