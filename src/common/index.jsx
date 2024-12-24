@@ -67,7 +67,7 @@ const SummaryApi={
     },
     getPosts:{
         url :`${backendDomin}/getPosts`,
-        method: "GET"
+        method: "POST"
     },
      deletePost:{
         url : `${backendDomin}/deletePost`,
