@@ -68,6 +68,10 @@ const SummaryApi={
     getPosts:{
         url :`${backendDomin}/getPosts`,
         method: "GET"
+    },
+     deletePost:{
+        url : `${backendDomin}/deletePost`,
+        method: "POST"
     }
 
 }
