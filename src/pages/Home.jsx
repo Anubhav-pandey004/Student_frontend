@@ -6,10 +6,12 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1); // Track the current page for pagination
   const [loading, setLoading] = useState(false); // To handle loading state
+  
 
   const getPosts = async () => {
     if (loading) return; // Prevent multiple simultaneous fetches
     setLoading(true); // Set loading state while fetching data
+    
 
     try {
       const response = await fetch(`${SummaryApi.getPosts.url}?page=${page}`, {
@@ -17,9 +19,12 @@ const Home = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          page: page,
+        }),
       });
       const data = await response.json();
-      console.log('This is posts to show on home page:', data.data);
+      // console.log('This is posts to show on home page:', data.data);
       
       // Append new posts to the existing ones
       setPosts(prevPosts => [...prevPosts, ...data.data]);
@@ -35,22 +40,22 @@ const Home = () => {
     getPosts(); // Fetch the first batch of posts when the component mounts
   }, []);
 
-  const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop; // How far the user has scrolled
-    const windowHeight = window.innerHeight; // Height of the visible window
-    const fullHeight = document.documentElement.offsetHeight; // Total height of the document
-    
-    // Check if the user is near the bottom
-    if (windowHeight + scrollTop >= fullHeight - 100) {
-      console.log("Reached the bottom! Load more content.");
-      getPosts(); // Trigger action to fetch next set of posts
-    }
-  };
+  // const handleScroll = () => {
+  //   const scrollTop = document.documentElement.scrollTop; // How far the user has scrolled
+  //   const windowHeight = window.innerHeight; // Height of the visible window
+  //   const fullHeight = document.documentElement.offsetHeight; // Total height of the document
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
-  }, []);
+  //   if (windowHeight + scrollTop >= fullHeight - 100) {
+  //     console.log("Reached the bottom! Load more content. page Updated");
+  //     setHasMore(!hasMore)
+  //     getPosts(); // Trigger action to fetch next set of posts
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+  // }, []);
 
   return (
     <div className="flex justify-center scrollbar-none bg-gray-100">
