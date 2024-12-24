@@ -1,8 +1,9 @@
+
 import { toast } from "react-toastify";
 
 import React, { useEffect, useState } from "react";
 import SummaryApi from "../common";
-import { Routes, Route, useParams, Link } from "react-router-dom";
+import { Routes, Route, useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Answer from "../pages/Answer";
 import ShowAnswer from "../components/ShowAnswer";
@@ -17,6 +18,7 @@ const Question = () => {
   const [close, setClose] = useState(false);
   const [showanswer, setShowAnswer] = useState(false);
   const [answer, setAnswer] = useState([]);
+  const navigate=useNavigate()
   const getAnswer = async () => {
     const dataResponse = await fetch(SummaryApi.getanswer.url, {
       method: SummaryApi.getanswer.method,
@@ -89,6 +91,30 @@ const Question = () => {
     }
   };
 
+  const deletePost=async(e)=>{
+    e.preventDefault();
+    console.log(question);
+    
+    const Response1 = await fetch(SummaryApi.deletePost.url,{
+      method:SummaryApi.deletePost.method,
+      credentials:"include",
+      headers:{
+        "content-type":"application/json"
+      },
+      body:JSON.stringify({
+        question:question
+      })
+    })
+    let det = await Response1.json();
+    if (det.success) {
+      navigate("/")
+      toast.success(det.message)
+    }
+    if (det.error) {
+      toast.error(det.message);
+    }
+  }
+
   return (
     <div className="flex justify-center scrollbar-none">
       <div className="w-full h-[100vh] lg:w-[50%]">
@@ -119,7 +145,7 @@ const Question = () => {
             {question?.subject}
           </div>
           <div className="w-full h-20 flex justify-end items-center">
-            <div className="w-1/3 h-full flex items-center">
+            <div className=" h-full flex items-center">
             
               <button
                 className="bg-slate-400 text-sm min-w-32 py-1 px-3 rounded-md text-white"
@@ -129,6 +155,17 @@ const Question = () => {
               >
                 Add Comment
               </button>
+            
+              {
+                user?._id == question?.userId?._id ?(
+                  <span className="text-blue-500 px-4 cursor-pointer" onClick={(e)=>{
+                    deletePost(e)
+                  }}>Delete</span>
+                ) :
+                (
+                  <span></span>
+                )
+              }
             </div>
           </div>
           <div>
